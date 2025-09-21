@@ -1,0 +1,82 @@
+[*.cs]
+
+# Default severity for analyzer diagnostics with category 'StyleCop.CSharp.LayoutRules'
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.LayoutRules.severity = suggestion
+
+# Default severity for analyzer diagnostics with category 'StyleCop.CSharp.NamingRules'
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.NamingRules.severity = suggestion
+
+# Default severity for analyzer diagnostics with category 'StyleCop.CSharp.OrderingRules'
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.OrderingRules.severity = suggestion
+
+# Default severity for analyzer diagnostics with category 'StyleCop.CSharp.DocumentationRules'
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.DocumentationRules.severity = suggestion
+
+# Default severity for analyzer diagnostics with category 'StyleCop.CSharp.MaintainabilityRules'
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.MaintainabilityRules.severity = suggestion
+
+# Default severity for analyzer diagnostics with category 'Design'
+dotnet_analyzer_diagnostic.category-Design.severity = suggestion
+
+# Default severity for analyzer diagnostics with category 'Globalization'
+dotnet_analyzer_diagnostic.category-Globalization.severity = suggestion
+
+# Default severity for analyzer diagnostics with category 'StyleCop.CSharp.SpacingRules'
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.SpacingRules.severity = suggestion
+
+# Default severity for analyzer diagnostics with category 'StyleCop.CSharp.ReadabilityRules'
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.ReadabilityRules.severity = suggestion
+
+# CA1051: 不要声明可见实例字段
+dotnet_diagnostic.CA1051.severity = suggestion
+
+# CA1822: 将成员标记为 static
+dotnet_diagnostic.CA1822.severity = suggestion
+
+# CA1062: 验证公共方法的参数
+dotnet_diagnostic.CA1062.severity = suggestion
+
+# CA1307: 为了清晰起见，请指定 StringComparison
+dotnet_diagnostic.CA1307.severity = suggestion
+
+# CA2000: 丢失范围之前释放对象
+dotnet_diagnostic.CA2000.severity = suggestion
+
+# CA1055: 类 URI 返回值不应是字符串
+dotnet_diagnostic.CA1055.severity = suggestion
+
+# CS8604: 引用类型参数可能为 null。
+dotnet_diagnostic.CS8604.severity = suggestion
+
+# CA1002: 不要公开泛型列表
+dotnet_diagnostic.CA1002.severity = suggestion
+
+# CA1827: 如果可以使用 Any() 则不使用 Count() 或 LongCount()
+dotnet_diagnostic.CA1827.severity = suggestion
+
+# CA1310: 为了确保正确，请指定 StringComparison
+dotnet_diagnostic.CA1310.severity = suggestion
+
+# CS8600: 将 null 字面量或可能为 null 的值转换为非 null 类型。
+dotnet_diagnostic.CS8600.severity = suggestion
+
+# CA1826: 不要在可索引的集合上使用 Enumerable 方法
+dotnet_diagnostic.CA1826.severity = suggestion
+
+# CA1054: 类 URI 参数不应为字符串
+dotnet_diagnostic.CA1054.severity = suggestion
+
+# IDE0003: 删除限定
+dotnet_diagnostic.IDE0003.severity = suggestion
+
+# CS8618: 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑添加 "required" 修饰符或声明为可为 null。
+dotnet_diagnostic.CS8618.severity = suggestion
+
+# Default severity for all analyzer diagnostics
+dotnet_analyzer_diagnostic.severity = suggestion
+
+# Default severity for analyzer diagnostics with category 'Style'
+dotnet_analyzer_diagnostic.category-Style.severity = suggestion
+
+# CS1591: 缺少对公共可见类型或成员的 XML 注释
+dotnet_diagnostic.CS1591.severity = suggestion

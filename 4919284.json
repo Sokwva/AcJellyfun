@@ -1,0 +1,206 @@
+{
+    "code": 0,
+    "data": {
+        "title": "【2019猴山春晚/原创国风电音】燃灯挂霓虹 ft.小勒个朵",
+        "bananaCountShow": "2210",
+        "isLike": false,
+        "commentCount": 144,
+        "bananaCount": 2210,
+        "mkey": "AAHewK3eIAAzMDM2Njc2ODgCARAAMEP1uwGd1vRpQAAAAHzFYEzr6SoJ7hH4ToAi6%2FwZ6RzzEqZRZb4%2FC8qNsWeJF9xeuc7Woh1Vu1TL5nNjtyKk0yO%2BKCwAtj5GnEV69eE%3D",
+        "isFavorite": false,
+        "isThrowBanana": false,
+        "stowCount": 533,
+        "currentVideoId": 6641840,
+        "pctr": 0.02,
+        "commentCountRealValue": 144,
+        "groupId": "",
+        "stowCountShow": "533",
+        "giftPeachCountShow": "0",
+        "channel": {
+            "parentName": "音乐",
+            "parentId": 58,
+            "name": "原创·翻唱",
+            "id": 136
+        },
+        "likeCount": 38,
+        "hasHotComment": true,
+        "shareCountShow": "6",
+        "isDislike": false,
+        "shareCount": 6,
+        "picShareUrl": "https://m.acfun.cn/v/?ac=4919284\u0026shareType=pic",
+        "danmakuCount": 50,
+        "currentVideoInfo": {
+            "priority": 0,
+            "title": "Part1",
+            "danmakuCountShow": "50",
+            "userPlayedSeconds": 0,
+            "sizeType": 1,
+            "danmakuGuidePosition": 10000,
+            "sourceStatus": 3,
+            "durationMillis": 193514,
+            "uploadTime": 1549259188000,
+            "visibleType": 1,
+            "danmakuCount": 50,
+            "fileName": "燃灯挂霓虹ac.mp4",
+            "isKsManifest": true,
+            "transcodeInfos": [
+                {
+                    "qualityType": "1080p",
+                    "sizeInBytes": 76322337,
+                    "hdr": false
+                },
+                {
+                    "qualityType": "720p",
+                    "sizeInBytes": 40361844,
+                    "hdr": false
+                },
+                {
+                    "qualityType": "540p",
+                    "sizeInBytes": 25247313,
+                    "hdr": false
+                },
+                {
+                    "qualityType": "360p",
+                    "sizeInBytes": 12478557,
+                    "hdr": false
+                }
+            ],
+            "id": "6641840"
+        },
+        "viewCountShow": "1.0万",
+        "dougaId": "4919284",
+        "commentCountTenThousandShow": "144",
+        "coverImgInfo": {
+            "width": 0,
+            "height": 0,
+            "size": 0,
+            "type": 0,
+            "animated": false,
+            "thumbnailImage": {
+                "cdnUrls": [
+                    {
+                        "url": "https://imgs.aixifan.com/FgMs_8sIPa5F4ybMojZvawcfkY2j",
+                        "freeTrafficProductAbbreviation": "",
+                        "freeTrafficCdn": false
+                    }
+                ],
+                "animated": 0
+            },
+            "expandedImage": {
+                "cdnUrls": [
+                    {
+                        "url": "https://imgs.aixifan.com/FgMs_8sIPa5F4ybMojZvawcfkY2j",
+                        "freeTrafficProductAbbreviation": "",
+                        "freeTrafficCdn": false
+                    }
+                ]
+            },
+            "thumbnailImageCdnUrl": "https://imgs.aixifan.com/FgMs_8sIPa5F4ybMojZvawcfkY2j"
+        },
+        "coverUrl": "https://tx-free-imgs.acfun.cn/FgMs_8sIPa5F4ybMojZvawcfkY2j?imageslim",
+        "disableEdit": true,
+        "createTimeMillis": 1549259300000,
+        "superUbb": true,
+        "shareUrl": "https://m.acfun.cn/v/?ac=4919284",
+        "status": 2,
+        "recoReason": {
+            "desc": "",
+            "href": "",
+            "tag": "",
+            "layoutType": 0,
+            "descType": 0,
+            "type": 0
+        },
+        "description": "\u003cbr/\u003e曲编混：司鼓君\r\u003cbr/\u003e词、唱：小勒个朵\r\u003cbr/\u003e人声混音：奶妈月\r\u003cbr/\u003e二胡：柠露Lemon\r\u003cbr/\u003ePV：纨绔の蹶\r\u003cbr/\u003e原创国风电音 希望大家喜欢！",
+        "belongToSpecifyArubamu": false,
+        "result": 0,
+        "originalDeclare": 0,
+        "videoList": null,
+        "viewCount": 10251,
+        "likeCountShow": "38",
+        "coverCdnUrls": [
+            {
+                "url": "https://tx-free-imgs.acfun.cn/FgMs_8sIPa5F4ybMojZvawcfkY2j?imageslim",
+                "freeTrafficCdn": true
+            },
+            {
+                "url": "https://imgs.aixifan.com/FgMs_8sIPa5F4ybMojZvawcfkY2j?imageslim",
+                "freeTrafficCdn": false
+            }
+        ],
+        "giftPeachCount": 0,
+        "isRewardSupportted": true,
+        "commentCountShow": "144",
+        "durationMillis": 193514,
+        "host-name": "hb2-acfun-kce-node162.aliyun",
+        "tagList": null,
+        "danmakuCountShow": "50",
+        "createTime": "2019-2-4",
+        "user": {
+            "action": 3,
+            "href": "451703",
+            "headCdnUrls": [
+                {
+                    "url": "https://tx-free-imgs.acfun.cn/content/2021_8_2/1.6279026896260767E9.png?imageslim",
+                    "freeTrafficCdn": true
+                },
+                {
+                    "url": "https://imgs.aixifan.com/content/2021_8_2/1.6279026896260767E9.png?imageslim",
+                    "freeTrafficCdn": false
+                }
+            ],
+            "isJoinUpCollege": false,
+            "followingCountValue": 2,
+            "contributeCountValue": 48,
+            "fanCount": "3288",
+            "socialMedal": {},
+            "avatarImage": "https://tx-free-imgs.acfun.cn/tioXmRIfbI-Z7nEBf-NfENbq-Jfm6Jn-VrAVja.png?imageslim",
+            "userHeadImgInfo": {
+                "width": 0,
+                "height": 0,
+                "size": 0,
+                "type": 0,
+                "animated": false,
+                "thumbnailImage": {
+                    "cdnUrls": [
+                        {
+                            "url": "https://imgs.aixifan.com/content/2021_8_2/1.6279026896260767E9.png",
+                            "freeTrafficProductAbbreviation": "",
+                            "freeTrafficCdn": false
+                        }
+                    ],
+                    "animated": 0
+                },
+                "expandedImage": {
+                    "cdnUrls": [
+                        {
+                            "url": "https://imgs.aixifan.com/content/2021_8_2/1.6279026896260767E9.png",
+                            "freeTrafficProductAbbreviation": "",
+                            "freeTrafficCdn": false
+                        }
+                    ]
+                },
+                "thumbnailImageCdnUrl": "https://imgs.aixifan.com/content/2021_8_2/1.6279026896260767E9.png"
+            },
+            "isFollowed": false,
+            "isFollowing": false,
+            "avatarFrame": 488,
+            "contributeCount": "48",
+            "avatarFramePcImg": "https://imgs.aixifan.com/tioXmRIfbI-Z7nEBf-NfENbq-Jfm6Jn-VrAVja.png",
+            "avatarFrameMobileImg": "https://imgs.aixifan.com/p2Yhu2KRLM-bqaqqe-IZRjye-AFBJri-jEFJNj.png",
+            "sexTrend": 1,
+            "verifiedTypes": null,
+            "headUrl": "https://imgs.aixifan.com/content/2021_8_2/1.6279026896260767E9.png",
+            "fanCountValue": 3288,
+            "followingStatus": 1,
+            "nameColor": 0,
+            "followingCount": "2",
+            "gender": 1,
+            "name": "司鼓君",
+            "signature": "影视、游戏配乐师\u0026amp;音乐制作人/工作联系sigujun@vip.qq.com",
+            "id": "451703",
+            "nameStyle": ""
+        },
+        "priority": 0
+    }
+}

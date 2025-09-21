@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Template</title>
+</head>
+
+<body>
+    <div id="TemplateConfigPage" data-role="page" class="page type-interior pluginConfigurationPage"
+        data-require="emby-input,emby-button,emby-select,emby-checkbox">
+        <div data-role="content">
+            <div class="content-primary">
+
+                <div class="verticalSection verticalSection">
+                    <div class="sectionTitleContainer flex align-items-center">
+                        <h2 class="sectionTitle">AcJellyfun 配置</h2><span id="current_version" name="current_version"
+                            is="emby-linkbutton" class="emby-button"></span>
+                        <a is="emby-linkbutton" class="raised button-alt headerHelpButton emby-button" target="_blank"
+                            href="https://github.com/">Github</a>
+                    </div>
+                </div>
+
+                <form id="TemplateConfigForm">
+                    <fieldset class="verticalSection verticalSection-extrabottompadding">
+                        <legend>
+                            <h3>主要配置</h3>
+                        </legend>
+
+                        <div class="inputContainer">
+                            <label class="inputLabel inputLabelUnfocused" for="AcFunDougaInfoApi">DougaInfo Api
+                                地址</label>
+                            <input id="AcFunDougaInfoApi" name="AcFunDougaInfoApi" type="text" is="emby-input" />
+                            <div class="fieldDescription">此接口用于获取对应的稿件信息</div>
+                        </div>
+
+                        <!-- 
+                    <div class="selectContainer">
+                        <label class="selectLabel" for="Options">Several Options</label>
+                        <select is="emby-select" id="Options" name="Options" class="emby-select-withcolor emby-select">
+                            <option id="optOneOption" value="OneOption">One Option</option>
+                            <option id="optAnotherOption" value="AnotherOption">Another Option</option>
+                        </select>
+                    </div>
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="AnInteger">An Integer</label>
+                        <input id="AnInteger" name="AnInteger" type="number" is="emby-input" min="0" />
+                        <div class="fieldDescription">A Description</div>
+                    </div>
+                    <div class="checkboxContainer checkboxContainer-withDescription">
+                        <label class="emby-checkbox-label">
+                            <input id="TrueFalseSetting" name="TrueFalseCheckBox" type="checkbox" is="emby-checkbox" />
+                            <span>A Checkbox</span>
+                        </label>
+                    </div>
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="AString">A String</label>
+                        <input id="AString" name="AString" type="text" is="emby-input" />
+                        <div class="fieldDescription">Another Description</div>
+                    </div> -->
+                    </fieldset>
+
+                    <div>
+                        <button is="emby-button" type="submit" class="raised button-submit block emby-button">
+                            <span>保存</span>
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            var TemplateConfig = {
+                pluginUniqueId: 'e471526c-fc10-4c54-a769-3b8e85abf708'
+            };
+
+            document.querySelector('#TemplateConfigPage')
+                .addEventListener('pageshow', function () {
+                    Dashboard.showLoadingMsg();
+                    ApiClient.getPluginConfiguration(TemplateConfig.pluginUniqueId).then(function (config) {
+                        // document.querySelector('#Options').value = config.Options;
+                        // document.querySelector('#AnInteger').value = config.AnInteger;
+                        // document.querySelector('#TrueFalseSetting').checked = config.TrueFalseSetting;
+                        // document.querySelector('#AString').value = config.AString;
+                        document.querySelector('#AcFunDougaInfoApi').value = config.AcFunDougaInfoApi;
+                        Dashboard.hideLoadingMsg();
+                    });
+                });
+
+            document.querySelector('#TemplateConfigForm')
+                .addEventListener('submit', function (e) {
+                    Dashboard.showLoadingMsg();
+                    ApiClient.getPluginConfiguration(TemplateConfig.pluginUniqueId).then(function (config) {
+                        // config.Options = document.querySelector('#Options').value;
+                        // config.AnInteger = document.querySelector('#AnInteger').value;
+                        // config.TrueFalseSetting = document.querySelector('#TrueFalseSetting').checked;
+                        // config.AString = document.querySelector('#AString').value;
+                        config.AcFunDougaInfoApi = document.querySelector('#AcFunDougaInfoApi').value;
+                        ApiClient.updatePluginConfiguration(TemplateConfig.pluginUniqueId, config).then(function (result) {
+                            Dashboard.processPluginConfigurationUpdateResult(result);
+                        });
+                    });
+
+                    e.preventDefault();
+                    return false;
+                });
+        </script>
+    </div>
+</body>
+
+</html>
