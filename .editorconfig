@@ -80,3 +80,6 @@ dotnet_analyzer_diagnostic.category-Style.severity = suggestion
 
 # CS1591: 缺少对公共可见类型或成员的 XML 注释
 dotnet_diagnostic.CS1591.severity = suggestion
+
+# CA1305: 指定 IFormatProvider
+dotnet_diagnostic.CA1305.severity = suggestion

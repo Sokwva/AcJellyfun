@@ -63,11 +63,23 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
                 {
                     ProviderIds = new Dictionary<string, string> { { BaseProviderId, acid }, { AcJellyfunSpId, SingleVideoProviderId + "_" + acid } },
                     ImageUrl = resp.Data.CoverURL,
-                    Overview = $"",
-                    ProductionYear = 2021,
+                    Overview = BuildOverview(resp),
+                    ProductionYear = GetYearFromCreateTime(resp.Data.CreateTime),
                 }
             ];
             return result;
+        }
+
+        protected static int GetYearFromCreateTime(string createTime)
+        {
+            if (string.IsNullOrEmpty(createTime))
+            {
+                return 0;
+            }
+
+            string year = createTime[..3];
+            int result = 0;
+            return int.TryParse(year, out result) ? result : 0;
         }
 
         /// <summary>
@@ -76,7 +88,23 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
         /// <returns>strings.</returns>
         protected static string BuildOverview(DougaInfoApiResp dougaInfoApiResp)
         {
-            return string.Empty;
+            if (string.IsNullOrEmpty(dougaInfoApiResp?.Data?.Description))
+            {
+                return string.Empty;
+            }
+            string unicodeRemovedDesc = UnicodeIncludedStrToNormalStr(dougaInfoApiResp.Data.Description);
+            string htmlTagRemovedDesc = RemoveHTMLTagInStr(unicodeRemovedDesc);
+
+            string desc = $@"{htmlTagRemovedDesc}
+            =================================
+播放：{dougaInfoApiResp?.Data?.ViewCount ?? 0}
+投蕉：{dougaInfoApiResp?.Data?.BananaCount ?? 0}
+点赞：{dougaInfoApiResp?.Data?.LikeCount ?? 0}
+收藏：{dougaInfoApiResp?.Data?.StowCount ?? 0}
+
+源地址：{dougaInfoApiResp?.Data?.ShareURL ?? "待发现"}
+            ";
+            return desc;
         }
 
         protected static string UnicodeIncludedStrToNormalStr(string rawText)
@@ -94,10 +122,17 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
             foreach (Match m in unicodeInSrcText)
             {
                 string after = Regex.Unescape(m.Value);
-                srcText = srcText.Replace(m.Value, after);
+                srcText = srcText.Replace(m.Value, after, System.StringComparison.Ordinal);
             }
 
             return srcText;
+        }
+
+        protected static string RemoveHTMLTagInStr(string rawText)
+        {
+            string str1 = Regex.Replace(rawText, "<[^>]+>", string.Empty);
+            string str2 = Regex.Replace(str1, "&[^;]+;", string.Empty);
+            return str2;
         }
     }
 }

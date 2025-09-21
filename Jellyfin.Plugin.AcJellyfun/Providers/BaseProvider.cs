@@ -1,3 +1,4 @@
+using System.IO;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -5,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Jellyfin.Plugin.AcJellyfun.Configuration;
 using Jellyfin.Plugin.AcJellyfun.Model;
-using MediaBrowser.Controller.Library;
+using MediaBrowser.Controller.Providers;
 using Microsoft.Extensions.Logging;
 
 namespace Jellyfin.Plugin.AcJellyfun.Providers

@@ -57,8 +57,12 @@ namespace Jellyfin.Plugin.AcJellyfun.Model
 
         [JsonPropertyName("createTimeMillis")]
         public int CreateTimeMillis { get; set; }
+        [JsonPropertyName("createTime")]
+        public string CreateTime { get; set; }
         [JsonPropertyName("coverUrl")]
         public string CoverURL { get; set; }
+        [JsonPropertyName("shareUrl")]
+        public string ShareURL { get; set; }
     }
 
     public class DougaInfoApiResp
