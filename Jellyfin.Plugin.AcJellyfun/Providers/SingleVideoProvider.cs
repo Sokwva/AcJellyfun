@@ -63,6 +63,8 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
                 return [];
             }
 
+            Log($"Return SearchResult of {acid}");
+
             List<RemoteSearchResult> result =
             [
                 new()
@@ -95,8 +97,9 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
             {
                 return new MetadataResult<Movie>{};
             }
+            Log($"Got DougaInfoApiResp of {acid}");
 
-            string? sid = info.GetProviderId(SingleVideoProviderId);
+            // string? sid = info.GetProviderId(SingleVideoProviderId);
             MetadataResult<Movie> result = new() { };
             Movie movie = new()
             {
@@ -107,6 +110,7 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
                 ProductionYear = GetYearFromCreateTime(resp.Data.CreateTime),
                 HomePageUrl = resp.Data.ShareURL,
             };
+            Log($"Write Metadata of acid {acid}");
 
             result.Item = movie;
             result.QueriedById = true;
@@ -120,6 +124,7 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
                 ImageUrl = resp.Data.User.HeadUrl,
                 ProviderIds = new Dictionary<string, string> { { AcJellyfunSpId, SingleVideoProviderId + string.Empty } }
             });
+            Log($"Write Person Metadata of user {resp.Data.User.Name}");
             return result;
         }
 
@@ -133,6 +138,7 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
             using HttpRequestMessage req = new(HttpMethod.Get, url);
             req.Headers.Add("User-Agent", UserAgentStr);
             req.Headers.Add("Refer", ReferStr);
+            Log($"Sent Image Request of {url}");
             return await httpClient.GetAsync(url, cancellationToken).ConfigureAwait(false);
         }
 
