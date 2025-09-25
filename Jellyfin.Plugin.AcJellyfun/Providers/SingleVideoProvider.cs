@@ -1,15 +1,16 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Jellyfin.Data.Entities.Libraries;
 using Jellyfin.Plugin.AcJellyfun.Model;
-using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
+using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
 using Microsoft.Extensions.Logging;
+using MediaBrowser.Controller.Entities.Movies;
 
 namespace Jellyfin.Plugin.AcJellyfun.Providers
 {
@@ -29,15 +30,15 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
             Timeout = System.TimeSpan.FromSeconds(60)
         };
 
-        public async Task<IEnumerable<RemoteSearchResult>> GetRemoteSearchResults(MovieInfo movieInfo, CancellationToken cancellationToken)
+        public async Task<IEnumerable<RemoteSearchResult>> GetSearchResults(MovieInfo searchInfo, CancellationToken cancellationToken)
         {
-            if (string.IsNullOrEmpty(movieInfo?.Name))
+            if (string.IsNullOrEmpty(searchInfo?.Name))
             {
                 return [];
             }
 
-            Log($"GetRemoteSearchResults of {movieInfo.Name}");
-            string[] pathsplit = movieInfo.Path.Split("/");
+            Log($"GetRemoteSearchResults of {searchInfo.Name}");
+            string[] pathsplit = searchInfo.Path.Split("/");
             string folderName = pathsplit.Last();
             if (string.IsNullOrEmpty(folderName))
             {
@@ -57,17 +58,82 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
                 return [];
             }
 
+            if (resp.Code != 0)
+            {
+                return [];
+            }
+
             List<RemoteSearchResult> result =
             [
                 new()
                 {
-                    ProviderIds = new Dictionary<string, string> { { BaseProviderId, acid }, { AcJellyfunSpId, SingleVideoProviderId + "_" + acid } },
+                    ProviderIds = new Dictionary<string, string> { { BaseProviderId, acid }, { AcJellyfunSpId, SingleVideoProviderId + "_ac" + acid } },
                     ImageUrl = resp.Data.CoverURL,
-                    Overview = BuildOverview(resp),
+                    Overview = resp.Data.Description,
                     ProductionYear = GetYearFromCreateTime(resp.Data.CreateTime),
                 }
             ];
             return result;
+        }
+
+        public async Task<MetadataResult<Movie>> GetMetadata(MovieInfo info, CancellationToken cancellationToken)
+        {
+            if (info == null)
+            {
+                return new MetadataResult<Movie>{};
+            }
+
+            string? dirName = Path.GetDirectoryName(info.Path);
+            if (string.IsNullOrEmpty(dirName) || !RegAcid.IsMatch(dirName))
+            {
+                return new MetadataResult<Movie>{};
+            }
+
+            string acid = dirName;
+            DougaInfoApiResp? resp = await FetchDougaInfo(acid, cancellationToken).ConfigureAwait(false);
+            if (resp == null || resp.Code != 0)
+            {
+                return new MetadataResult<Movie>{};
+            }
+
+            string? sid = info.GetProviderId(SingleVideoProviderId);
+            MetadataResult<Movie> result = new() { };
+            Movie movie = new()
+            {
+                ProviderIds = new Dictionary<string, string> { { BaseProviderId, acid }, { AcJellyfunSpId, SingleVideoProviderId + "_ac" + acid } },
+                Name = resp.Data.Title,
+                OriginalTitle = resp.Data.Title,
+                Overview = BuildOverview(resp),
+                ProductionYear = GetYearFromCreateTime(resp.Data.CreateTime),
+                HomePageUrl = resp.Data.ShareURL,
+            };
+
+            result.Item = movie;
+            result.QueriedById = true;
+            result.HasMetadata = true;
+
+            result.AddPerson(new MediaBrowser.Controller.Entities.PersonInfo
+            {
+                Name = resp.Data.User.Name,
+                Type = Data.Enums.PersonKind.Producer,
+                Role = "Up",
+                ImageUrl = resp.Data.User.HeadUrl,
+                ProviderIds = new Dictionary<string, string> { { AcJellyfunSpId, SingleVideoProviderId + string.Empty } }
+            });
+            return result;
+        }
+
+        public async Task<HttpResponseMessage> GetImageResponse(string url, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(url))
+            {
+                return new HttpResponseMessage() { };
+            }
+
+            using HttpRequestMessage req = new(HttpMethod.Get, url);
+            req.Headers.Add("User-Agent", UserAgentStr);
+            req.Headers.Add("Refer", ReferStr);
+            return await httpClient.GetAsync(url, cancellationToken).ConfigureAwait(false);
         }
 
         protected static int GetYearFromCreateTime(string createTime)
@@ -92,6 +158,7 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
             {
                 return string.Empty;
             }
+
             string unicodeRemovedDesc = UnicodeIncludedStrToNormalStr(dougaInfoApiResp.Data.Description);
             string htmlTagRemovedDesc = RemoveHTMLTagInStr(unicodeRemovedDesc);
 
@@ -116,7 +183,7 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
 
             string srcText = rawText;
 
-            Regex regex = new Regex("""\\u[0-z]{4}""");
+            Regex regex = new("""\\u[0-z]{4}""");
 
             MatchCollection unicodeInSrcText = regex.Matches(srcText);
             foreach (Match m in unicodeInSrcText)

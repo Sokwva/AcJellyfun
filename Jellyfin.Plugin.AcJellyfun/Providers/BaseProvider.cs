@@ -26,6 +26,9 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
 
         protected HttpClient httpClient;
 
+        protected string UserAgentStr = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0";
+        protected string ReferStr = "https://www.acfun.cn/";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseProvider"/> class.
         /// </summary>
@@ -97,5 +100,7 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
             string respContent = await resp.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
             return string.IsNullOrEmpty(respContent) ? null : JsonSerializer.Deserialize<DougaInfoApiResp>(respContent);
         }
+
+
     }
 }
