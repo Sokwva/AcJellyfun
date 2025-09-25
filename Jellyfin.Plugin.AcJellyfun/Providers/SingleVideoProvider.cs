@@ -1,16 +1,14 @@
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Jellyfin.Plugin.AcJellyfun.Model;
+using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Providers;
 using Microsoft.Extensions.Logging;
-using MediaBrowser.Controller.Entities.Movies;
 
 namespace Jellyfin.Plugin.AcJellyfun.Providers
 {
@@ -32,27 +30,14 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
 
         public async Task<IEnumerable<RemoteSearchResult>> GetSearchResults(MovieInfo searchInfo, CancellationToken cancellationToken)
         {
+            Log($"GetSearchResults: {searchInfo?.Name} {searchInfo?.OriginalTitle} {searchInfo?.Path}");
             if (string.IsNullOrEmpty(searchInfo?.Name))
             {
                 return [];
             }
 
-            Log($"GetRemoteSearchResults of {searchInfo.Name}");
-            string[] pathsplit = searchInfo.Path.Split("/");
-            string folderName = pathsplit.Last();
-            if (string.IsNullOrEmpty(folderName))
-            {
-                return [];
-            }
-
-            if (!RegAcid.IsMatch(folderName))
-            {
-                return [];
-            }
-
-            string acid = folderName;
-
-            DougaInfoApiResp? resp = await FetchDougaInfo(folderName, cancellationToken).ConfigureAwait(false);
+            string acid = searchInfo.Name;
+            DougaInfoApiResp? resp = await FetchDougaInfo(acid, cancellationToken).ConfigureAwait(false);
             if (resp == null)
             {
                 return [];
@@ -63,15 +48,16 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
                 return [];
             }
 
-            Log($"Return SearchResult of {acid}");
+            Log($"Return SearchResult of {acid} Description: {resp.Data.Description}");
 
             List<RemoteSearchResult> result =
             [
                 new()
                 {
                     ProviderIds = new Dictionary<string, string> { { BaseProviderId, acid }, { AcJellyfunSpId, SingleVideoProviderId + "_ac" + acid } },
+                    Name = resp.Data.Title,
                     ImageUrl = resp.Data.CoverURL,
-                    Overview = resp.Data.Description,
+                    Overview = RemoveHTMLTagInStr(UnicodeIncludedStrToNormalStr(resp.Data.Description)),
                     ProductionYear = GetYearFromCreateTime(resp.Data.CreateTime),
                 }
             ];
@@ -80,23 +66,21 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
 
         public async Task<MetadataResult<Movie>> GetMetadata(MovieInfo info, CancellationToken cancellationToken)
         {
-            if (info == null)
+            Log($"GetMetadata: {info?.Name} {info?.GetProviderId(BaseProviderId)} {info?.Path}");
+
+            string? acid = info?.GetProviderId(BaseProviderId);
+            if (string.IsNullOrEmpty(acid) || !RegAcid.IsMatch(acid))
             {
-                return new MetadataResult<Movie>{};
+                Log("acid 不符合要求");
+                return new MetadataResult<Movie> { };
             }
 
-            string? dirName = Path.GetDirectoryName(info.Path);
-            if (string.IsNullOrEmpty(dirName) || !RegAcid.IsMatch(dirName))
-            {
-                return new MetadataResult<Movie>{};
-            }
-
-            string acid = dirName;
             DougaInfoApiResp? resp = await FetchDougaInfo(acid, cancellationToken).ConfigureAwait(false);
             if (resp == null || resp.Code != 0)
             {
-                return new MetadataResult<Movie>{};
+                return new MetadataResult<Movie> { };
             }
+
             Log($"Got DougaInfoApiResp of {acid}");
 
             // string? sid = info.GetProviderId(SingleVideoProviderId);
@@ -149,8 +133,8 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
                 return 0;
             }
 
-            string year = createTime[..3];
-            int result = 0;
+            string year = createTime[..4];
+            int result;
             return int.TryParse(year, out result) ? result : 0;
         }
 
@@ -169,6 +153,7 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
             string htmlTagRemovedDesc = RemoveHTMLTagInStr(unicodeRemovedDesc);
 
             string desc = $@"{htmlTagRemovedDesc}
+
             =================================
 播放：{dougaInfoApiResp?.Data?.ViewCount ?? 0}
 投蕉：{dougaInfoApiResp?.Data?.BananaCount ?? 0}
