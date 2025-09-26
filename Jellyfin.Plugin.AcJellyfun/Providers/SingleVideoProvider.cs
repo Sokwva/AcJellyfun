@@ -154,14 +154,12 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
 
             string desc = $@"{htmlTagRemovedDesc}
 
-            =================================
+=================================
+
 播放：{dougaInfoApiResp?.Data?.ViewCount ?? 0}
 投蕉：{dougaInfoApiResp?.Data?.BananaCount ?? 0}
 点赞：{dougaInfoApiResp?.Data?.LikeCount ?? 0}
-收藏：{dougaInfoApiResp?.Data?.StowCount ?? 0}
-
-源地址：{dougaInfoApiResp?.Data?.ShareURL ?? "待发现"}
-            ";
+收藏：{dougaInfoApiResp?.Data?.StowCount ?? 0}";
             return desc;
         }
 
