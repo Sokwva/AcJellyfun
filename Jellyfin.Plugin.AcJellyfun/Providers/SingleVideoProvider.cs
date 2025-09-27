@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -112,11 +114,11 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
             return result;
         }
 
-        public async Task<HttpResponseMessage> GetImageResponse(string url, CancellationToken cancellationToken)
+        public async Task<HttpResponseMessage?> GetImageResponse(string url, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(url))
             {
-                return new HttpResponseMessage() { };
+                return null;
             }
 
             using HttpRequestMessage req = new(HttpMethod.Get, url);
@@ -124,6 +126,26 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
             req.Headers.Add("Refer", ReferStr);
             Log($"Sent Image Request of {url}");
             return await httpClient.GetAsync(url, cancellationToken).ConfigureAwait(false);
+        }
+
+        public async Task<StaffApi?> GetStaffs(string acid, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(acid))
+            {
+                return null;
+            }
+
+            using StringContent reqParam = new StringContent($"resourceId={acid}&resourceType=2");
+            HttpResponseMessage resp = await httpClient.PostAsync("https://www.acfun.cn/rest/pc-direct/staff/getStaff", reqParam, cancellationToken).ConfigureAwait(false);
+            if (!resp.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            string respContent = await resp.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+            return !string.IsNullOrEmpty(respContent)
+                ? null
+                : string.IsNullOrEmpty(respContent) ? null : JsonSerializer.Deserialize<StaffApi>(respContent);
         }
 
         protected static int GetYearFromCreateTime(string createTime)

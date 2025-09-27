@@ -1,0 +1,74 @@
+{
+    "result": 0,
+    "staffInfos": [],
+    "host-name": "hb2-acfun-kce-node21.aliyun",
+    "upInfo": {
+        "avatarFrameImgInfo": null,
+        "action": 3,
+        "href": "74304006",
+        "staffRoleName": "UP主",
+        "headUrl": "http://p4.a.yximgs.com/uhead/AB/2023/05/19/17/BMjAyMzA1MTkxNzA1NTVfMTAxODkwMjg0OV8yX2hkNzU4XzQz_s.jpg?imageslim",
+        "fanCountValue": 6,
+        "avatarFramePcImg": "",
+        "avatarFrameMobileImg": "",
+        "sexTrend": 0,
+        "isFollowing": false,
+        "avatarFrame": 0,
+        "contributeCount": "473",
+        "followingStatus": 1,
+        "nameColor": 0,
+        "gender": -1,
+        "followingCount": "0",
+        "headCdnUrls": [
+            {
+                "url": "http://p4.a.yximgs.com/uhead/AB/2023/05/19/17/BMjAyMzA1MTkxNzA1NTVfMTAxODkwMjg0OV8yX2hkNzU4XzQz_s.jpg?imageslim",
+                "freeTrafficCdn": false
+            }
+        ],
+        "followingCountValue": 0,
+        "contributeCountValue": 473,
+        "fanCount": "6",
+        "userHeadImgInfo": {
+            "width": 0,
+            "height": 0,
+            "size": 0,
+            "type": 0,
+            "animated": false,
+            "thumbnailImage": {
+                "cdnUrls": [
+                    {
+                        "url": "http://p4.a.yximgs.com/uhead/AB/2023/05/19/17/BMjAyMzA1MTkxNzA1NTVfMTAxODkwMjg0OV8yX2hkNzU4XzQz_s.jpg",
+                        "freeTrafficCdn": false
+                    }
+                ]
+            },
+            "smallSharedImage": {
+                "cdnUrls": [
+                    {
+                        "url": "http://p4.a.yximgs.com/uhead/AB/2023/05/19/17/BMjAyMzA1MTkxNzA1NTVfMTAxODkwMjg0OV8yX2hkNzU4XzQz_s.jpg",
+                        "freeTrafficCdn": false
+                    }
+                ]
+            },
+            "expandedImage": {
+                "cdnUrls": [
+                    {
+                        "url": "http://p4.a.yximgs.com/uhead/AB/2023/05/19/17/BMjAyMzA1MTkxNzA1NTVfMTAxODkwMjg0OV8yX2hkNzU4XzQz_s.jpg",
+                        "freeTrafficCdn": false
+                    }
+                ]
+            },
+            "originImage": {
+                "cdnUrls": [
+                    {
+                        "url": "http://p4.a.yximgs.com/uhead/AB/2023/05/19/17/BMjAyMzA1MTkxNzA1NTVfMTAxODkwMjg0OV8yX2hkNzU4XzQz_s.jpg",
+                        "freeTrafficCdn": false
+                    }
+                ]
+            },
+            "thumbnailImageCdnUrl": "http://p4.a.yximgs.com/uhead/AB/2023/05/19/17/BMjAyMzA1MTkxNzA1NTVfMTAxODkwMjg0OV8yX2hkNzU4XzQz_s.jpg"
+        },
+        "name": "其义则始乎为士de田利芳",
+        "id": "74304006"
+    }
+}
