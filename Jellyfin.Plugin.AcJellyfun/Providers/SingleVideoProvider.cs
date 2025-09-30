@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,12 +31,12 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
         public async Task<IEnumerable<RemoteSearchResult>> GetSearchResults(MovieInfo searchInfo, CancellationToken cancellationToken)
         {
             Log($"GetSearchResults: {searchInfo?.Name} {searchInfo?.OriginalTitle} {searchInfo?.Path}");
-            if (string.IsNullOrEmpty(searchInfo?.Name))
+            string acid = searchInfo?.GetProviderId(BaseProviderId);
+            if (string.IsNullOrEmpty(acid))
             {
                 return [];
             }
 
-            string acid = searchInfo.Name;
             DougaInfoApiResp? resp = await FetchDougaInfo(acid, cancellationToken).ConfigureAwait(false);
             if (resp == null)
             {
@@ -108,8 +106,24 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
                 Type = Data.Enums.PersonKind.Producer,
                 Role = "Up",
                 ImageUrl = resp.Data.User.HeadUrl,
-                ProviderIds = new Dictionary<string, string> { { AcJellyfunSpId, SingleVideoProviderId + string.Empty } }
+                ProviderIds = new Dictionary<string, string> { { AcJellyfunSpId, SingleVideoProviderId + "_user_" + resp.Data.User.ID } }
             });
+
+            StaffApi? staffs = await FetchStaffs(acid, cancellationToken).ConfigureAwait(false);
+            if (staffs != null && staffs.Result == 0 && staffs.StaffInfo.Count != 0)
+            {
+                foreach (StaffItem staff in staffs.StaffInfo)
+                {
+                    result.AddPerson(new MediaBrowser.Controller.Entities.PersonInfo
+                    {
+                        Name = staff.Name,
+                        Type = Data.Enums.PersonKind.Editor,
+                        Role = staff.StaffRoleName,
+                        ImageUrl = staff.HeadURL,
+                        ProviderIds = new Dictionary<string, string> { { AcJellyfunSpId, SingleVideoProviderId + "_user_" + staff.Id } }
+                    });
+                }
+            }
             Log($"Write Person Metadata of user {resp.Data.User.Name}");
             return result;
         }
@@ -128,25 +142,7 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
             return await httpClient.GetAsync(url, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<StaffApi?> GetStaffs(string acid, CancellationToken cancellationToken)
-        {
-            if (string.IsNullOrEmpty(acid))
-            {
-                return null;
-            }
 
-            using StringContent reqParam = new StringContent($"resourceId={acid}&resourceType=2");
-            HttpResponseMessage resp = await httpClient.PostAsync("https://www.acfun.cn/rest/pc-direct/staff/getStaff", reqParam, cancellationToken).ConfigureAwait(false);
-            if (!resp.IsSuccessStatusCode)
-            {
-                return null;
-            }
-
-            string respContent = await resp.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-            return !string.IsNullOrEmpty(respContent)
-                ? null
-                : string.IsNullOrEmpty(respContent) ? null : JsonSerializer.Deserialize<StaffApi>(respContent);
-        }
 
         protected static int GetYearFromCreateTime(string createTime)
         {

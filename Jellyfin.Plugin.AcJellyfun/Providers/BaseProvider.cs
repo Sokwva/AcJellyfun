@@ -101,6 +101,30 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
             return string.IsNullOrEmpty(respContent) ? null : JsonSerializer.Deserialize<DougaInfoApiResp>(respContent);
         }
 
+        public async Task<StaffApi?> FetchStaffs(string acid, CancellationToken cancellationToken)
+        {
+            if (string.IsNullOrEmpty(acid))
+            {
+                return null;
+            }
 
+            if (!RegAcid.IsMatch(acid))
+            {
+                return null;
+            }
+
+            using StringContent reqParam = new StringContent($"resourceId={acid}&resourceType=2");
+            HttpResponseMessage resp = await httpClient.PostAsync("https://www.acfun.cn/rest/pc-direct/staff/getStaff", reqParam, cancellationToken).ConfigureAwait(false);
+            if (!resp.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            string respContent = await resp.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+            return !string.IsNullOrEmpty(respContent)
+                ? null
+                : string.IsNullOrEmpty(respContent) ? null : JsonSerializer.Deserialize<StaffApi>(respContent);
+        }
     }
+
 }
