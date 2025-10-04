@@ -79,12 +79,12 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
             DougaInfoApiResp? resp = await FetchDougaInfo(acid, cancellationToken).ConfigureAwait(false);
             if (resp == null || resp.Code != 0)
             {
+                Log("没有找到对应的稿件信息");
                 return new MetadataResult<Movie> { };
             }
 
             Log($"Got DougaInfoApiResp of {acid}");
 
-            // string? sid = info.GetProviderId(SingleVideoProviderId);
             MetadataResult<Movie> result = new() { };
             Movie movie = new()
             {
@@ -101,7 +101,8 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
             result.QueriedById = true;
             result.HasMetadata = true;
 
-            result.AddPerson(new MediaBrowser.Controller.Entities.PersonInfo
+            Log("记录Up主信息");
+            result.AddPerson(new PersonInfo
             {
                 Name = resp.Data.User.Name,
                 Type = Data.Enums.PersonKind.Producer,
@@ -112,6 +113,7 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
 
             if (resp.Data.TagList!=null && resp.Data.TagList.Count!=0)
             {
+                Log($"记录{resp.Data.TagList.Count}个Tag信息");
                 foreach (DougaInfoTagList item in resp.Data.TagList)
                 {
                     result.Item.AddTag(item.Name);
@@ -121,9 +123,10 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
             StaffApi? staffs = await FetchStaffs(acid, cancellationToken).ConfigureAwait(false);
             if (staffs != null && staffs.Result == 0 && staffs.StaffInfo.Count != 0)
             {
+                Log("添加Staff信息");
                 foreach (StaffItem staff in staffs.StaffInfo)
                 {
-                    result.AddPerson(new MediaBrowser.Controller.Entities.PersonInfo
+                    result.AddPerson(new PersonInfo
                     {
                         Name = staff.Name,
                         Type = Data.Enums.PersonKind.Editor,
@@ -152,8 +155,6 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
             return await httpClient.GetAsync(url, cancellationToken).ConfigureAwait(false);
         }
 
-
-
         protected static int GetYearFromCreateTime(string createTime)
         {
             if (string.IsNullOrEmpty(createTime))
@@ -181,9 +182,7 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
             string htmlTagRemovedDesc = RemoveHTMLTagInStr(unicodeRemovedDesc);
 
             string desc = $@"{htmlTagRemovedDesc}
-
 -----
-
 播放：{dougaInfoApiResp?.Data?.ViewCount ?? 0}
 投蕉：{dougaInfoApiResp?.Data?.BananaCount ?? 0}
 点赞：{dougaInfoApiResp?.Data?.LikeCount ?? 0}
