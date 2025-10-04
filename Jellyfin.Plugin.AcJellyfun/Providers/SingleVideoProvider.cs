@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Jellyfin.Plugin.AcJellyfun.Model;
+using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Entities.Movies;
 using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Entities;
@@ -106,8 +107,16 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
                 Type = Data.Enums.PersonKind.Producer,
                 Role = "Up",
                 ImageUrl = resp.Data.User.HeadUrl,
-                ProviderIds = new Dictionary<string, string> { { AcJellyfunSpId, SingleVideoProviderId + "_user_" + resp.Data.User.ID } }
+                ProviderIds = new Dictionary<string, string> { { AcJellyfunSpId, SingleVideoProviderId + "_user_" + resp.Data.User.ID } },
             });
+
+            if (resp.Data.TagList!=null && resp.Data.TagList.Count!=0)
+            {
+                foreach (DougaInfoTagList item in resp.Data.TagList)
+                {
+                    result.Item.AddTag(item.Name);
+                }
+            }
 
             StaffApi? staffs = await FetchStaffs(acid, cancellationToken).ConfigureAwait(false);
             if (staffs != null && staffs.Result == 0 && staffs.StaffInfo.Count != 0)
@@ -128,6 +137,7 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
             return result;
         }
 
+        /// <inheritdoc/>
         public async Task<HttpResponseMessage?> GetImageResponse(string url, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(url))
@@ -172,7 +182,7 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
 
             string desc = $@"{htmlTagRemovedDesc}
 
-=================================
+-----
 
 播放：{dougaInfoApiResp?.Data?.ViewCount ?? 0}
 投蕉：{dougaInfoApiResp?.Data?.BananaCount ?? 0}

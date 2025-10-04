@@ -42,7 +42,7 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
         /// </summary>
         /// <param name="httpClient"></param>
         /// <param name="loggerFactory"></param>
-        public SingleVideoImgProvider(HttpClient httpClient, ILoggerFactory loggerFactory):base(httpClient,loggerFactory.CreateLogger<SingleVideoImgProvider>())
+        public SingleVideoImgProvider(HttpClient httpClient, ILoggerFactory loggerFactory) : base(httpClient, loggerFactory.CreateLogger<SingleVideoImgProvider>())
         {
         }
         public string Name => Plugin.PluginName;
@@ -57,12 +57,12 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
 
         public async Task<IEnumerable<RemoteImageInfo>> GetImages(BaseItem item, CancellationToken cancellationToken)
         {
-            Log($"GetImages: {item?.Name} {item?.OriginalTitle} {item?.Path}");
             if (item == null)
             {
                 return new List<RemoteImageInfo> { };
             }
             string acid = item.GetProviderId(BaseProviderId);
+            Log($"GetImages: {item?.Name} {item?.OriginalTitle} {item?.Path} {acid}");
             if (string.IsNullOrEmpty(acid) || !RegAcid.IsMatch(acid))
             {
                 return new List<RemoteImageInfo> { };
@@ -80,25 +80,29 @@ namespace Jellyfin.Plugin.AcJellyfun.Providers
                 return new List<RemoteImageInfo> { };
             }
 
-            Log($"Return GetImages of {acid}");
-            RemoteImageInfo resou = new()
+            List<RemoteImageInfo> result = [
+                new()
             {
                 ProviderName = Name,
                 Url = resp.Data.CoverURL,
+                Type = ImageType.Primary,
                 Language = "zh"
-            };
-
-            List<RemoteImageInfo> result = [];
-            resou.Type = ImageType.Primary;
-            result.Add(resou);
-
-            RemoteImageInfo resou2 = resou;
-            resou2.Type = ImageType.Art;
-            result.Add(resou2);
-
-            RemoteImageInfo resou3 = resou;
-            resou3.Type = ImageType.Backdrop;
-            result.Add(resou3);
+            },
+                new()
+            {
+                ProviderName = Name,
+                Url = resp.Data.CoverURL,
+                Type = ImageType.Art,
+                Language = "zh"
+            },
+                new()
+            {
+                ProviderName = Name,
+                Url = resp.Data.CoverURL,
+                Type = ImageType.Backdrop,
+                Language = "zh"
+            }
+            ];
 
             return result;
         }

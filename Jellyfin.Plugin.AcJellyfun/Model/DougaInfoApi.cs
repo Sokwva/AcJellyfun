@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace Jellyfin.Plugin.AcJellyfun.Model
@@ -21,6 +22,15 @@ namespace Jellyfin.Plugin.AcJellyfun.Model
 
         [JsonPropertyName("parentName")]
         public string ParentName { get; set; }
+    }
+
+    public class DougaInfoTagList
+    {
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
     }
 
     public class DougaInfoApiData
@@ -63,6 +73,8 @@ namespace Jellyfin.Plugin.AcJellyfun.Model
         public string CoverURL { get; set; }
         [JsonPropertyName("shareUrl")]
         public string ShareURL { get; set; }
+        [JsonPropertyName("tagList")]
+        public List<DougaInfoTagList>? TagList { get; set; }
     }
 
     public class DougaInfoApiResp
