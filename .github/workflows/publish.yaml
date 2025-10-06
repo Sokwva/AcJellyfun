@@ -44,8 +44,8 @@ jobs:
           dotnet publish --nologo --no-restore --configuration=Release -p:Version=${{steps.vars.outputs.VERSION}} ${{ env.project }}
           mkdir -p artifacts
           zip -j ./artifacts/${{ env.artifact }}_${{steps.vars.outputs.VERSION}}.zip ./Jellyfin.Plugin.AcJellyfun/bin/Release/net8.0/Jellyfin.Plugin.AcJellyfun.dll
-      - name: Generate metadata
-        run: python3 ./scripts/meta-gen.py ./artifacts/${{ env.artifact }}_${{steps.vars.outputs.VERSION}}.zip ${GITHUB_REF#refs/*/}
+      - name: Generate manifest
+        run: python3 ./scripts/manifest_gen.py ./artifacts/${{ env.artifact }}_${{steps.vars.outputs.VERSION}}.zip ${GITHUB_REF#refs/*/}
         env:
           CN_DOMAIN: ${{ vars.CN_DOMAIN }}
       - name: Publish release
@@ -57,11 +57,11 @@ jobs:
           release_name: '${{ github.ref_name }}'
           file_glob: true
           overwrite: true
-      - name: Publish metadata
+      - name: Publish manifest
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ./meta*.json
-          tag: "metadata"
+          file: ./manifest*.json
+          tag: "manifest"
           overwrite: true
           file_glob: true
