@@ -47,7 +47,7 @@ def main():
     changelog = result.stdout.decode('utf-8').strip()
 
     try:
-        with urlopen(f'{REPO_URL}releases/download/manifest/meta.json') as f:
+        with urlopen(f'{REPO_URL}/releases/download/manifest/manifest.json') as f:
             manifest = json.load(f)
     except HTTPError as err:
         if err.code == 404:
@@ -58,7 +58,7 @@ def main():
     manifest[0]['versions'] = list(filter(lambda x: x['version'] != f"{version}.0", manifest[0]['versions']))
     manifest[0]['versions'].insert(0, generate_version(filepath, version, changelog))
 
-    with open('meta.json', 'w') as f:
+    with open('manifest.json', 'w') as f:
         json.dump(manifest, f, indent=2)
 
     cn_domain = 'https://ghfast.top/'
